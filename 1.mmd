@@ -1,0 +1,153 @@
+```mermaid
+
+flowchart TB
+    subgraph "Client Layer"
+        Agent["Agent Terminal<br>(Level 1-5 Operative)"]
+        AgentUI["Secure Agent Interface<br>(UI/CLI)"]
+    end
+
+    subgraph "Secure Gateway Layer"
+        APIGateway["Secure API Gateway<br>(TLS + Custom Encryption)"]
+        HandshakeVerifier["Handshake Protocol<br>Verifier"]
+    end
+
+    subgraph "Authentication & Session Layer"
+        AuthService["Authentication Service"]
+        SessionManager["Agent Session Manager"]
+        BiometricAuth["Neural Signature<br>Verification"]
+    end
+
+    subgraph "Core Processing Layer"
+        QueryProcessor["Query Processing<br>Service"]
+        NLPEngine["NLP & Semantic<br>Analysis Engine"]
+        RulesMatcher["Rules Matching<br>Engine"]
+        LevelChecker["Clearance Level<br>Checker"]
+    end
+
+    subgraph "Response Generation Layer"
+        ResponseGen["Response Generation<br>Service"]
+        GreetingFormatter["Agent-Level<br>Greeting Formatter"]
+        ResponseFormatter["Response Content<br>Formatter"]
+        Scrambler["Information Scrambler<br>(when required)"]
+    end
+
+    subgraph "Security & Monitoring Layer"
+        SecurityMonitor["Security & Anomaly<br>Detection Service"]
+        MosaicDetection["Mosaic Anomaly<br>Detection"]
+        PatternAnalyzer["Query Pattern<br>Analyzer"]
+        ThreatAssessor["Threat Assessment<br>Engine"]
+        KillSwitch["Protocol Zeta-5<br>(Kill-Switch)"]
+    end
+
+    subgraph "Encryption Layer"
+        LCCSystem["Layered Cipher Code<br>(LCC) System"]
+        QuantumHash["Quantum Hashing<br>Module"]
+        OTPGenerator["One-Time Pad<br>Generator & Manager"]
+        GhostStep["Ghost-Step<br>Algorithm"]
+    end
+
+    subgraph "Data Persistence Layer"
+        AgentDB["Agent Profile &<br>Clearance Database"]
+        RulesDB["Rules Data Store<br>(JSON)"]
+        LogDB["Encrypted Audit<br>Trail Database"]
+        NeuralSigDB["Neural Signatures<br>Database"]
+    end
+
+    subgraph "Logging & Audit Layer"
+        AuditService["Audit & Logging<br>Service"]
+        Forensics["Forensic Analysis<br>Tools"]
+        SecureLogs["Tamper-Proof<br>Logging"]
+    end
+
+    subgraph "Advanced RAG Layer"
+        VectorStore["Vector Store<br>(FAISS)"]
+        GraphDB["Knowledge Graph<br>Database"]
+        HybridRetrieval["Hybrid Retrieval<br>Engine"]
+    end
+
+    %% Client Flow
+    Agent --> AgentUI
+    AgentUI --> APIGateway
+
+    %% Authentication Flow
+    APIGateway --> AuthService
+    AuthService --> HandshakeVerifier
+    HandshakeVerifier --> BiometricAuth
+    BiometricAuth --> SessionManager
+    AuthService --> AgentDB
+    BiometricAuth --> NeuralSigDB
+
+    %% Query Processing Flow
+    SessionManager --> QueryProcessor
+    QueryProcessor --> NLPEngine
+    NLPEngine --> RulesMatcher
+    RulesMatcher --> LevelChecker
+    RulesMatcher --> RulesDB
+    LevelChecker --> AgentDB
+
+    %% RAG Components
+    QueryProcessor --> VectorStore
+    QueryProcessor --> GraphDB
+    VectorStore --> HybridRetrieval
+    GraphDB --> HybridRetrieval
+    HybridRetrieval --> RulesMatcher
+
+    %% Response Generation
+    LevelChecker --> ResponseGen
+    RulesMatcher --> ResponseGen
+    ResponseGen --> GreetingFormatter
+    ResponseGen --> ResponseFormatter
+    ResponseFormatter --> Scrambler
+    
+    %% Security Monitoring
+    QueryProcessor --"Real-time monitoring"--> SecurityMonitor
+    SecurityMonitor --> MosaicDetection
+    SecurityMonitor --> PatternAnalyzer
+    MosaicDetection --> ThreatAssessor
+    PatternAnalyzer --> ThreatAssessor
+    ThreatAssessor --> KillSwitch
+    
+    %% Encryption
+    Scrambler --> LCCSystem
+    LCCSystem --> QuantumHash
+    LCCSystem --> OTPGenerator
+    LCCSystem --> GhostStep
+    
+    %% Return Flow
+    LCCSystem --> APIGateway
+    APIGateway --> AgentUI
+    
+    %% Logging
+    AuthService --"Log events"--> AuditService
+    QueryProcessor --"Log queries"--> AuditService
+    ResponseGen --"Log responses"--> AuditService
+    SecurityMonitor --"Log security events"--> AuditService
+    LCCSystem --"Log encryption events"--> AuditService
+    
+    AuditService --> SecureLogs
+    SecureLogs --> LogDB
+    LogDB --> Forensics
+
+    %% Styling
+    classDef clientNode fill:#f9d5e5,stroke:#333,stroke-width:1px;
+    classDef gatewayNode fill:#eeac99,stroke:#333,stroke-width:1px;
+    classDef authNode fill:#e06377,stroke:#333,stroke-width:1px;
+    classDef processingNode fill:#c83349,stroke:#333,stroke-width:1px;
+    classDef responseNode fill:#5b9aa0,stroke:#333,stroke-width:1px;
+    classDef securityNode fill:#d8a7b1,stroke:#333,stroke-width:1px;
+    classDef encryptionNode fill:#b6e2d3,stroke:#333,stroke-width:1px;
+    classDef dataNode fill:#fae03c,stroke:#333,stroke-width:1px;
+    classDef auditNode fill:#7a9e9f,stroke:#333,stroke-width:1px;
+    classDef ragNode fill:#98d9e1,stroke:#333,stroke-width:1px;
+
+    class Agent,AgentUI clientNode;
+    class APIGateway,HandshakeVerifier gatewayNode;
+    class AuthService,SessionManager,BiometricAuth authNode;
+    class QueryProcessor,NLPEngine,RulesMatcher,LevelChecker processingNode;
+    class ResponseGen,GreetingFormatter,ResponseFormatter,Scrambler responseNode;
+    class SecurityMonitor,MosaicDetection,PatternAnalyzer,ThreatAssessor,KillSwitch securityNode;
+    class LCCSystem,QuantumHash,OTPGenerator,GhostStep encryptionNode;
+    class AgentDB,RulesDB,LogDB,NeuralSigDB dataNode;
+    class AuditService,Forensics,SecureLogs auditNode;
+    class VectorStore,GraphDB,HybridRetrieval ragNode;
+ ```
