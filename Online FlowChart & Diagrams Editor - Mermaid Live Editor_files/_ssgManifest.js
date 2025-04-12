@@ -1,1 +1,0 @@
-self.__SSG_MANIFEST=new Set(["\u002Fextension\u002FautoFillFailed","\u002Fextension\u002FinstallationParams","\u002Funinstall"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()
