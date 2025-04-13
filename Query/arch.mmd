@@ -1,0 +1,38 @@
+flowchart TB
+    %% Main components
+    QueryProcessor["Query Processing\nService"]
+    NLPEngine["NLP & Semantic\nAnalysis Engine"]
+    RulesMatcher["Rules Matching\nEngine"]
+    LevelChecker["Clearance Level\nChecker"]
+    
+    %% External layers/components
+    SecureGateway["Secure Gateway Layer"]
+    SessionService["Session Service"]
+    SecurityService["Security &\nMonitoring Layer"]
+    ResponseGenerator["Response Generation\nLayer"]
+    RulesDataStore[(Rules Data\nStore)]
+    
+    %% Flow
+    SecureGateway -->|"Agent Query"| QueryProcessor
+    QueryProcessor -->|"1. Process Query"| NLPEngine
+    NLPEngine -->|"2. Entities, Intents"| RulesMatcher
+    RulesMatcher -->|"3. Matching Rules"| LevelChecker
+    LevelChecker -->|"4. Filtered Rules"| QueryProcessor
+    QueryProcessor -->|"5. Selected Rule"| ResponseGenerator
+    
+    %% Data access
+    RulesMatcher -.->|"Load Rules"| RulesDataStore
+    LevelChecker -.->|"Verify Policies"| RulesDataStore
+    
+    %% Side connections
+    QueryProcessor -.->|"Update Session"| SessionService
+    QueryProcessor -.->|"Report Security Events"| SecurityService
+    
+    %% Styling
+    classDef core fill:#c83349,stroke:#333,stroke-width:1px,color:white;
+    classDef external fill:#5b9aa0,stroke:#333,stroke-width:1px;
+    classDef data fill:#fae03c,stroke:#333,stroke-width:1px;
+    
+    class QueryProcessor,NLPEngine,RulesMatcher,LevelChecker core;
+    class SecureGateway,SessionService,SecurityService,ResponseGenerator external;
+    class RulesDataStore data;

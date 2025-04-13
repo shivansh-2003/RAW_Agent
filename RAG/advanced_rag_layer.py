@@ -19,7 +19,7 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS
 from langchain.schema import Document
-from langchain.llms import Anthropic
+from langchain_anthropic import ChatAnthropic
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 
@@ -280,7 +280,7 @@ class AdvancedRAG:
     def _init_llm(self):
         """Initialize the language model"""
         try:
-            return Anthropic(api_key=ANTHROPIC_API_KEY)
+            return ChatAnthropic(api_key=ANTHROPIC_API_KEY)
         except Exception as e:
             logger.error(f"Error initializing LLM: {e}")
             # Return None as fallback, we'll handle this in the query methods
