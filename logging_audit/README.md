@@ -1,8 +1,149 @@
-# Project SHADOW Logging & Audit Layer
+# Secure Logging and Audit Trail System
 
-## Overview
+A robust and secure logging and audit trail system for tracking system events, user activities, and security incidents with tamper-proof verification.
 
-The Logging & Audit Layer in Project SHADOW provides comprehensive security-focused logging, audit trail management, and forensic analysis capabilities. This layer ensures all system operations are properly recorded, analyzed, and stored in a tamper-proof manner, creating an immutable record of all actions within the system.
+## Core Components
+
+### 1. SecureLogger (secure_logger.py)
+
+The `SecureLogger` is a tamper-proof logging solution that provides:
+
+- **Cryptographic Integrity**: Each log record is digitally signed and linked to previous records
+- **Encryption**: Optional encryption of sensitive log data
+- **Structured Logging**: JSON-based log records with rich metadata
+- **Log Rotation**: Automatic rotation of log files based on size
+- **Log Archiving**: Compression and retention of historical logs
+- **Integrity Verification**: Tools to verify log chain hasn't been tampered with
+
+Key features:
+- HMAC-based log record signatures
+- Chained signatures to detect log tampering
+- Configurable log levels and retention policies
+- Compatible with standard Python logging
+
+### 2. AuditTrailService (audit_trail_service.py)
+
+The `AuditTrailService` provides higher-level auditing capabilities:
+
+- **Event Classification**: Categorize events by type (auth, data access, admin, system)
+- **Searchable Logs**: Query and filter logs based on various criteria
+- **Export Functionality**: Export audit logs to JSON for analysis
+- **Retention Management**: Automatic cleanup of old logs based on policy
+
+Supported event types:
+- Authentication events (login success/failure)
+- Data access events (read/write/delete)
+- Administrative actions (user management, configuration)
+- System events (startup, shutdown, errors)
+
+## Usage
+
+### Basic SecureLogger Usage
+
+```python
+from logging_audit.secure_logger import SecureLogger
+
+# Initialize logger
+logger = SecureLogger(
+    name="app_server",
+    log_level="INFO",
+    log_dir="logs", 
+    encryption_enabled=True
+)
+
+# Log messages at different levels
+logger.info("Server started", extra={"version": "1.2.3"})
+logger.warning("High memory usage detected", extra={"memory_usage": "85%"})
+logger.error("Database connection failed", extra={"error_code": "DB_CONN_01"})
+
+# Verify log integrity
+results = logger.verify_log_integrity()
+print(f"Logs verified: {results['verified']}")
+```
+
+### AuditTrailService Usage
+
+```python
+from logging_audit.audit_trail_service import AuditTrailService
+
+# Initialize audit service
+audit = AuditTrailService(log_dir="audit_logs", retention_days=365)
+
+# Log authentication event
+audit.log_auth_event(
+    user_id="user123", 
+    success=True, 
+    details={"ip_address": "192.168.1.1", "auth_method": "password"}
+)
+
+# Log data access
+audit.log_data_access(
+    user_id="user123",
+    resource_id="document_456",
+    action="read",
+    success=True,
+    details={"access_reason": "Monthly report generation"}
+)
+
+# Search logs for specific criteria
+results = audit.search_logs(
+    criteria={"user_id": "user123"},
+    start_date="2023-01-01",
+    end_date="2023-01-31"
+)
+
+# Export audit trail
+exported_count = audit.export_logs(
+    output_file="monthly_audit.json",
+    start_date="2023-01-01",
+    end_date="2023-01-31"
+)
+
+# Verify audit trail integrity
+verification = audit.verify_integrity()
+```
+
+## Security Features
+
+- **Tamper Detection**: Cryptographically secured chain of log records
+- **Non-repudiation**: Digital signatures on all log entries
+- **Confidentiality**: Optional encryption of log content
+- **Integrity Verification**: Tools to detect any tampering with logs
+- **Log Rotation**: Automatic management of log files
+- **Chain of Custody**: Complete and verifiable history of system events
+
+## Installation
+
+The logging and audit system requires Python 3.8+ and the following dependencies:
+
+```
+cryptography>=3.4.0
+```
+
+## Configuration
+
+Sample configuration:
+
+```python
+# SecureLogger configuration
+secure_logger_config = {
+    "name": "application_name",
+    "log_level": "INFO",  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+    "log_dir": "/var/log/secure",
+    "node_id": "node-01",  # Unique identifier for this server
+    "max_log_size_mb": 10,
+    "retention_days": 90,
+    "encryption_enabled": True,
+    "key_file": "/etc/secure_logger/keys.json"
+}
+
+# AuditTrailService configuration
+audit_trail_config = {
+    "log_dir": "/var/log/audit",
+    "retention_days": 365,
+    "secret_key": "your-secret-key-here"  # For HMAC verification
+}
+```
 
 ## Security Classification
 
@@ -215,13 +356,3 @@ The logging and audit layer is designed to be extensible with additional feature
 - `IntentAnalysis`: Deeper behavioral analysis of agent query patterns
 - `ComplianceReporting`: Automated generation of security compliance reports
 
-## License
-
-CLASSIFIED - For authorized use only within Project SHADOW.
-All rights reserved. 
-noteId: "016c3290182511f08f4e55be34bef22f"
-tags: []
-
----
-
- 
